@@ -55,7 +55,7 @@ DataStream<String> text = [...]
 DataStream<Tuple2<String, Integer>> wordCounts = text
     .flatMap(new LineSplitter())
     .keyBy(value -> value.f0)
-    .timeWindow(Time.seconds(5))
+    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
     .sum(1).setParallelism(5);
 
 wordCounts.print();
@@ -71,7 +71,7 @@ val text = [...]
 val wordCounts = text
     .flatMap{ _.split(" ") map { (_, 1) } }
     .keyBy(_._1)
-    .timeWindow(Time.seconds(5))
+    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
     .sum(1).setParallelism(5)
 wordCounts.print()
 
@@ -114,7 +114,7 @@ val text = [...]
 val wordCounts = text
     .flatMap{ _.split(" ") map { (_, 1) } }
     .keyBy(_._1)
-    .timeWindow(Time.seconds(5))
+    .window(TumblingEventTimeWindows.of(Time.seconds(5)))
     .sum(1)
 wordCounts.print()
 
@@ -181,7 +181,7 @@ try {
 
 A system-wide default parallelism for all execution environments can be defined by setting the
 `parallelism.default` property in `./conf/flink-conf.yaml`. See the
-[Configuration]({{ site.baseurl }}/ops/config.html) documentation for details.
+[Configuration]({{ site.baseurl }}/deployment/config.html) documentation for details.
 
 ## Setting the Maximum Parallelism
 

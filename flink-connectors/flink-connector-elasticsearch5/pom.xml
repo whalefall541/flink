@@ -26,7 +26,7 @@ under the License.
 	<parent>
 		<groupId>org.apache.flink</groupId>
 		<artifactId>flink-connectors</artifactId>
-		<version>1.12-SNAPSHOT</version>
+		<version>1.13-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -118,13 +118,6 @@ under the License.
 			<groupId>io.netty</groupId>
 			<artifactId>netty-transport</artifactId>
 			<version>4.1.44.Final</version>
-		</dependency>
-
-		<dependency>
-			<!-- Bumped for security purposes and making it work with Jackson dependencies (2.10.1) -->
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.27</version>
 		</dependency>
 
 		<!-- test dependencies -->

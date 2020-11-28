@@ -25,20 +25,27 @@ import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.operators.collect.ClientAndIterator;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.util.TestLogger;
+import org.apache.flink.util.function.FunctionWithException;
 
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.zip.GZIPOutputStream;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -114,7 +121,7 @@ public class FileSourceTextLinesITCase extends TestLogger {
 				WatermarkStrategy.noWatermarks(),
 				"file-source");
 
-		final DataStreamUtils.ClientAndIterator<String> client =
+		final ClientAndIterator<String> client =
 				DataStreamUtils.collectWithClient(stream, "Continuous TextFiles Monitoring Test");
 
 		// write one file, execute, and wait for its result
@@ -242,32 +249,63 @@ public class FileSourceTextLinesITCase extends TestLogger {
 
 	private static void writeFile(File testDir, int num) throws IOException {
 		final File file = new File(testDir, FILE_PATHS[num]);
-		final File parent = file.getParentFile();
-		assertTrue(parent.mkdirs() || parent.exists());
+		writeFileAtomically(file, LINES_PER_FILE[num]);
+	}
 
-		try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-			for (String line : LINES_PER_FILE[num]) {
-				writer.println(line);
-			}
-		}
+	private static void writeCompressedFile(File testDir, int num) throws IOException {
+		final File file = new File(testDir, FILE_PATHS[num] + ".gz");
+		writeFileAtomically(file, LINES_PER_FILE[num], GZIPOutputStream::new);
 	}
 
 	private static void writeAllFiles(File testDir) throws IOException {
 		for (int i = 0; i < FILE_PATHS.length; i++) {
-			writeFile(testDir, i);
+			// we write half of the files regularly, half compressed
+			if (i % 2 == 0) {
+				writeFile(testDir, i);
+			} else {
+				writeCompressedFile(testDir, i);
+			}
 		}
 	}
 
 	private static void writeHiddenJunkFiles(File testDir) throws IOException {
+		final String[] junkContents = new String[] {
+			"This should not end up in the test result.",
+			"Foo bar bazzl junk"
+		};
+
 		for (String junkPath : HIDDEN_JUNK_PATHS) {
 			final File file = new File(testDir, junkPath);
-			final File parent = file.getParentFile();
-			assertTrue(parent.mkdirs() || parent.exists());
+			writeFileAtomically(file, junkContents);
+		}
+	}
 
-			try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-				writer.println("This should not end up in the test result.");
-				writer.println("Foo bar bazzl junk");
+	private static void writeFileAtomically(final File file, final String[] lines) throws IOException {
+		writeFileAtomically(file, lines, (v) -> v);
+	}
+
+	private static void writeFileAtomically(
+			final File file,
+			final String[] lines,
+			final FunctionWithException<OutputStream, OutputStream, IOException> streamEncoderFactory) throws IOException {
+
+		// we don't use TMP_FOLDER.newFile() here because we don't want this to actually create a file,
+		// but just construct the file path
+		final File stagingFile = new File(TMP_FOLDER.getRoot(), ".tmp-" + UUID.randomUUID().toString());
+
+		try (final FileOutputStream fileOut = new FileOutputStream(stagingFile);
+				final OutputStream out = streamEncoderFactory.apply(fileOut);
+				final OutputStreamWriter encoder = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+				final PrintWriter writer = new PrintWriter(encoder)) {
+
+			for (String line : lines) {
+				writer.println(line);
 			}
 		}
+
+		final File parent = file.getParentFile();
+		assertTrue(parent.mkdirs() || parent.exists());
+
+		assertTrue(stagingFile.renameTo(file));
 	}
 }

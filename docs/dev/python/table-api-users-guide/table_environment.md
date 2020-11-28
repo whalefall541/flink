@@ -90,7 +90,7 @@ table_env = StreamTableEnvironment.create(env, environment_settings=env_settings
 
 {% endhighlight %}
 
-**Note:** Almost all the configurations in `ExecutionEnvironment`/`StreamExecutionEnvironment` can be configured via `TableEnvironment.get_config()` now, see [Configuration]({% link ops/config.md %}) for more details.
+**Note:** Almost all the configurations in `ExecutionEnvironment`/`StreamExecutionEnvironment` can be configured via `TableEnvironment.get_config()` now, see [Configuration]({% link deployment/config.md %}) for more details.
 Only a few rarely used or deprecated configurations still require direct access to `ExecutionEnvironment` /`StreamExecutionEnvironment` for configuring, e.g. the input dependency constraint.
 
 TableEnvironment API
@@ -548,7 +548,7 @@ For more details about the different kinds of UDFs, please refer to [User Define
 ### Dependency Management
 
 These APIs are used to manage the Python dependencies which are required by the Python UDFs.
-Please refer to the [Dependency Management]({% link dev/python/table-api-users-guide/dependency_management.md %}#python-dependency) documentation for more details.
+Please refer to the [Dependency Management]({% link dev/python/table-api-users-guide/dependency_management.md %}#python-dependency-in-python-program) documentation for more details.
 
 <table class="table table-bordered">
   <thead>
@@ -614,8 +614,8 @@ Please refer to the [Dependency Management]({% link dev/python/table-api-users-g
       </td>
       <td>
         Returns the table config to define the runtime behavior of the Table API.
-        You can find all the available configuration options in <a href="{{ site.baseurl }}/ops/config.html">Configuration</a> and
-        <a href="{{ site.baseurl }}/dev/python/table-api-users-guide/python_config.html">Python Configuation</a>. <br> <br>
+        You can find all the available configuration options in <a href="{{ site.baseurl }}/deployment/config.html">Configuration</a> and
+        <a href="{{ site.baseurl }}/dev/python/python_config.html">Python Configuation</a>. <br> <br>
         The following code is an example showing how to set the configuration options through this API:
 {% highlight python %}
 # set the parallelism to 8
@@ -843,7 +843,7 @@ Statebackend, Checkpoint and Restart Strategy
 ---------------------------------------------
 
 Before Flink 1.10 you can configure the statebackend, checkpointing and restart strategy via the `StreamExecutionEnvironment`.
-And now you can configure them by setting key-value options in `TableConfig`, see [Fault Tolerance]({% link ops/config.md %}#fault-tolerance), [State Backends]({% link ops/config.md %}#checkpoints-and-state-backends) and [Checkpointing]({% link ops/config.md %}#checkpointing) for more details.
+And now you can configure them by setting key-value options in `TableConfig`, see [Fault Tolerance]({% link deployment/config.md %}#fault-tolerance), [State Backends]({% link deployment/config.md %}#checkpoints-and-state-backends) and [Checkpointing]({% link deployment/config.md %}#checkpointing) for more details.
 
 The following code is an example showing how to configure the statebackend, checkpoint and restart strategy through the Table API:
 {% highlight python %}

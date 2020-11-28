@@ -133,8 +133,8 @@ public class LocalInputChannelTest {
 				.setNumberOfSubpartitions(parallelism)
 				.setNumTargetKeyGroups(parallelism)
 				.setResultPartitionManager(partitionManager)
-				.setBufferPoolFactory(p -> networkBuffers.createBufferPool(
-					producerBufferPoolSize, producerBufferPoolSize, null, parallelism, Integer.MAX_VALUE))
+				.setBufferPoolFactory(() -> networkBuffers.createBufferPool(
+					producerBufferPoolSize, producerBufferPoolSize, parallelism, Integer.MAX_VALUE))
 				.build();
 
 			// Create a buffer pool for this partition
@@ -467,15 +467,13 @@ public class LocalInputChannelTest {
 		ResultSubpartitionView subpartitionView = subpartition.createReadView(() -> {});
 
 		TestingResultPartitionManager partitionManager = new TestingResultPartitionManager(subpartitionView);
-		LocalInputChannel channel = createLocalInputChannel(inputGate, partitionManager);
+		final RecordingChannelStateWriter stateWriter = new RecordingChannelStateWriter();
+		LocalInputChannel channel = createLocalInputChannel(inputGate, partitionManager, 0, 0, b -> b.setStateWriter(stateWriter));
 		inputGate.setInputChannels(channel);
 		channel.requestSubpartition(0);
 
-		final RecordingChannelStateWriter stateWriter = new RecordingChannelStateWriter();
-		inputGate.setChannelStateWriter(stateWriter);
-
 		final CheckpointStorageLocationReference location = CheckpointStorageLocationReference.getDefault();
-		CheckpointOptions options = new CheckpointOptions(CheckpointType.CHECKPOINT, location, true, true);
+		CheckpointOptions options = new CheckpointOptions(CheckpointType.CHECKPOINT, location, true, true, 0);
 		stateWriter.start(0, options);
 
 		final CheckpointBarrier barrier = new CheckpointBarrier(0, 123L, options);
