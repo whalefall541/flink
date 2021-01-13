@@ -27,7 +27,7 @@ under the License.
 {:toc}
 
 This connector provides a Sink that writes partitioned files to filesystems
-supported by the [Flink `FileSystem` abstraction]({{ site.baseurl}}/deployment/filesystems/index.html).
+supported by the [Flink `FileSystem` abstraction]({% link deployment/filesystems/index.md %}).
 
 The streaming file sink writes incoming data into buckets. Given that the incoming streams can be unbounded,
 data in each bucket are organized into part files of finite size. The bucketing behaviour is fully configurable
@@ -44,7 +44,7 @@ rolling policy. The default policy rolls part files based on size, a timeout tha
      and cannot be safely read by downstream systems.
  </div>
 
- <img src="{{ site.baseurl }}/fig/streamfilesink_bucketing.png" class="center" style="width: 100%;" />
+ <img src="{% link /fig/streamfilesink_bucketing.png %}" class="center" style="width: 100%;" />
 
 
 ## File Formats
@@ -176,7 +176,7 @@ import org.apache.avro.Schema;
 
 
 Schema schema = ...;
-DataStream<GenericRecord> stream = ...;
+DataStream<GenericRecord> input = ...;
 
 final StreamingFileSink<GenericRecord> sink = StreamingFileSink
 	.forBulkFormat(outputBasePath, ParquetAvroWriters.forGenericRecord(schema))
@@ -214,7 +214,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSin
 import org.apache.flink.formats.parquet.protobuf.ParquetProtoWriters;
 
 // ProtoRecord is a generated protobuf Message class.
-DataStream<ProtoRecord> stream = ...;
+DataStream<ProtoRecord> input = ...;
 
 final StreamingFileSink<ProtoRecord> sink = StreamingFileSink
 	.forBulkFormat(outputBasePath, ParquetProtoWriters.forType(ProtoRecord.class))
@@ -269,7 +269,7 @@ import org.apache.avro.Schema;
 
 
 Schema schema = ...;
-DataStream<GenericRecord> stream = ...;
+DataStream<GenericRecord> input = ...;
 
 final StreamingFileSink<GenericRecord> sink = StreamingFileSink
 	.forBulkFormat(outputBasePath, AvroWriters.forGenericRecord(schema))
@@ -438,7 +438,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSin
 import org.apache.flink.orc.writer.OrcBulkWriterFactory;
 
 String schema = "struct<_col0:string,_col1:int>";
-DataStream<Person> stream = ...;
+DataStream<Person> input = ...;
 
 final OrcBulkWriterFactory<Person> writerFactory = new OrcBulkWriterFactory<>(new PersonVectorizer(schema));
 

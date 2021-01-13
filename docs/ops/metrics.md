@@ -934,7 +934,17 @@ Metrics related to data exchange between task executors using netty network comm
     </tr>
     <tr>
       <td>inPoolUsage</td>
-      <td>An estimate of the input buffers usage.</td>
+      <td>An estimate of the input buffers usage. (ignores LocalInputChannels)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inputFloatingBuffersUsage</td>
+      <td>An estimate of the floating input buffers usage. (ignores LocalInputChannels)</td>
+      <td>Gauge</td>
+    </tr>
+    <tr>
+      <td>inputExclusiveBuffersUsage</td>
+      <td>An estimate of the exclusive input buffers usage. (ignores LocalInputChannels)</td>
       <td>Gauge</td>
     </tr>
     <tr>
@@ -1250,7 +1260,17 @@ Certain RocksDB native metrics are available but disabled by default, you can fi
     </tr>
     <tr>
       <td>idleTimeMsPerSecond</td>
-      <td>The time (in milliseconds) this task is idle (either has no data to process or it is back pressured) per second.</td>
+      <td>The time (in milliseconds) this task is idle (has no data to process) per second. Idle time excludes back pressured time, so if the task is back pressured it is not idle.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>backPressuredTimeMsPerSecond</td>
+      <td>The time (in milliseconds) this task is back pressured per second.</td>
+      <td>Meter</td>
+    </tr>
+    <tr>
+      <td>busyTimeMsPerSecond</td>
+      <td>The time (in milliseconds) this task is busy (neither idle nor back pressured) per second. Can be NaN, if the value could not be calculated.</td>
       <td>Meter</td>
     </tr>
     <tr>
@@ -1653,6 +1673,57 @@ Request metrics aggregated over a subset of all entities of the respective type:
   - `/taskmanagers/metrics?taskmanagers=A,B,C`
   - `/jobs/metrics?jobs=D,E,F`
   - `/jobs/<jobid>/vertices/<vertexid>/subtasks/metrics?subtask=1,2,3`
+
+<span class="label label-danger">Warning</span> Metric names can contain special characters that you need to be escape when querying metrics.
+For example, "`a_+_b`" would be escaped to "`a_%2B_b`".
+
+List of characters that should be escaped:
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Character</th>
+            <th>Escape Sequence</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>#</td>
+            <td>%23</td>
+        </tr>
+        <tr>
+            <td>$</td>
+            <td>%24</td>
+        </tr>
+        <tr>
+            <td>&</td>
+            <td>%26</td>
+        </tr>
+        <tr>
+            <td>+</td>
+            <td>%2B</td>
+        </tr>
+        <tr>
+            <td>/</td>
+            <td>%2F</td>
+        </tr>
+        <tr>
+            <td>;</td>
+            <td>%3B</td>
+        </tr>
+        <tr>
+            <td>=</td>
+            <td>%3D</td>
+        </tr>
+        <tr>
+            <td>?</td>
+            <td>%3F</td>
+        </tr>
+        <tr>
+            <td>@</td>
+            <td>%40</td>
+        </tr>
+    </tbody>
+</table>
 
 Request a list of available metrics:
 

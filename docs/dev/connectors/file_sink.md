@@ -27,9 +27,9 @@ under the License.
 {:toc}
 
 This connector provides a unified Sink for `BATCH` and `STREAMING` that writes partitioned files to filesystems
-supported by the [Flink `FileSystem` abstraction]({{ site.baseurl}}/deployment/filesystems/index.html). This filesystem
+supported by the [Flink `FileSystem` abstraction]({% link deployment/filesystems/index.md %}). This filesystem
 connector provides the same guarantees for both `BATCH` and `STREAMING` and it is an evolution of the 
-existing [Streaming File Sink]({{ site.baseurl }}/dev/connectors/streamfile_sink.html) which was designed for providing exactly-once semantics for `STREAMING` execution.
+existing [Streaming File Sink]({% link dev/connectors/streamfile_sink.md %}) which was designed for providing exactly-once semantics for `STREAMING` execution.
 
 The file sink writes incoming data into buckets. Given that the incoming streams can be unbounded,
 data in each bucket is organized into part files of finite size. The bucketing behaviour is fully configurable
@@ -49,7 +49,7 @@ specify additional conditions based on size or time.
      in the `in-progress` or the `pending` state, and cannot be safely read by downstream systems.
  </div>
 
- <img src="{{ site.baseurl }}/fig/streamfilesink_bucketing.png" class="center" style="width: 100%;" />
+ <img src="{% link /fig/streamfilesink_bucketing.png %}" class="center" style="width: 100%;" />
 
 ## File Formats
 
@@ -182,7 +182,7 @@ import org.apache.avro.Schema;
 
 
 Schema schema = ...;
-DataStream<GenericRecord> stream = ...;
+DataStream<GenericRecord> input = ...;
 
 final FileSink<GenericRecord> sink = FileSink
 	.forBulkFormat(outputBasePath, ParquetAvroWriters.forGenericRecord(schema))
@@ -220,7 +220,7 @@ import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.formats.parquet.protobuf.ParquetProtoWriters;
 
 // ProtoRecord is a generated protobuf Message class.
-DataStream<ProtoRecord> stream = ...;
+DataStream<ProtoRecord> input = ...;
 
 final FileSink<ProtoRecord> sink = FileSink
 	.forBulkFormat(outputBasePath, ParquetProtoWriters.forType(ProtoRecord.class))
@@ -275,7 +275,7 @@ import org.apache.avro.Schema;
 
 
 Schema schema = ...;
-DataStream<GenericRecord> stream = ...;
+DataStream<GenericRecord> input = ...;
 
 final FileSink<GenericRecord> sink = FileSink
 	.forBulkFormat(outputBasePath, AvroWriters.forGenericRecord(schema))
@@ -444,7 +444,7 @@ import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.orc.writer.OrcBulkWriterFactory;
 
 String schema = "struct<_col0:string,_col1:int>";
-DataStream<Person> stream = ...;
+DataStream<Person> input = ...;
 
 final OrcBulkWriterFactory<Person> writerFactory = new OrcBulkWriterFactory<>(new PersonVectorizer(schema));
 

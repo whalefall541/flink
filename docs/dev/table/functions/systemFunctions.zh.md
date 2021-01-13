@@ -285,7 +285,7 @@ EXISTS (sub-query)
       </td>
       <td>
         <p>Returns TRUE if <i>sub-query</i> returns at least one row. Only supported if the operation can be rewritten in a join and group operation.</p>
-        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{{ site.baseurl }}/zh/dev/table/streaming/query_configuration.html">Query Configuration</a> for details.</p>
+        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{% link dev/table/streaming/query_configuration.zh.md %}">Query Configuration</a> for details.</p>
       </td>
     </tr>
 
@@ -297,7 +297,7 @@ value IN (sub-query)
       </td>
       <td>
         <p>Returns TRUE if <i>value</i> is equal to a row returned by sub-query.</p>
-        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{{ site.baseurl }}/zh/dev/table/streaming/query_configuration.html">Query Configuration</a> for details.</p>
+        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{% link dev/table/streaming/query_configuration.zh.md %}">Query Configuration</a> for details.</p>
       </td>
     </tr>
 
@@ -309,7 +309,7 @@ value NOT IN (sub-query)
       </td>
       <td>
         <p>Returns TRUE if <i>value</i> is not equal to every row returned by <i>sub-query</i>.</p>
-        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{{ site.baseurl }}/zh/dev/table/streaming/query_configuration.html">Query Configuration</a> for details.</p>
+        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{% link dev/table/streaming/query_configuration.zh.md %}">Query Configuration</a> for details.</p>
       </td>
     </tr>
     </tbody>
@@ -459,7 +459,7 @@ ANY.in(TABLE)
       </td>
       <td>
         <p>Returns TRUE if <i>ANY</i> is equal to a row returned by sub-query <i>TABLE</i>.</p>
-        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{{ site.baseurl }}/zh/dev/table/streaming/query_configuration.html">Query Configuration</a> for details.</p>
+        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{% link dev/table/streaming/query_configuration.zh.md %}">Query Configuration</a> for details.</p>
       </td>
     </tr>
 
@@ -639,7 +639,7 @@ ANY.in(TABLE)
       </td>
       <td>
         <p>Returns TRUE if <i>ANY</i> is equal to a row returned by sub-query <i>TABLE</i>.</p>
-        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{{ site.baseurl }}/zh/dev/table/streaming/query_configuration.html">Query Configuration</a> for details.</p>
+        <p><b>Note:</b> For streaming queries the operation is rewritten in a join and group operation. The required state to compute the query result might grow infinitely depending on the number of distinct input rows. Please provide a query configuration with valid retention interval to prevent excessive state size. See <a href="{% link dev/table/streaming/query_configuration.zh.md %}">Query Configuration</a> for details.</p>
       </td>
     </tr>
 
@@ -3759,7 +3759,7 @@ FROM_UNIXTIME(numeric[, string])
 {% endhighlight %}
       </td>
       <td>
-        <p>Returns a representation of the <i>numeric</i> argument as a value in <i>string</i> format (default is 'YYYY-MM-DD hh:mm:ss'). <i>numeric</i> is an internal timestamp value representing seconds since '1970-01-01 00:00:00' UTC, such as produced by the UNIX_TIMESTAMP() function. The return value is expressed in the session time zone (specified in TableConfig).</p>
+        <p>Returns a representation of the <i>numeric</i> argument as a value in <i>string</i> format (default is 'yyyy-MM-dd HH:mm:ss'). <i>numeric</i> is an internal timestamp value representing seconds since '1970-01-01 00:00:00' UTC, such as produced by the UNIX_TIMESTAMP() function. The return value is expressed in the session time zone (specified in TableConfig).</p>
         <p>E.g., <code>FROM_UNIXTIME(44)</code> returns '1970-01-01 00:00:44' if in UTC time zone, but returns '1970-01-01 09:00:44' if in 'Asia/Tokyo' time zone.</p>
         <p>Only supported in blink planner.</p>
       </td>
@@ -4595,7 +4595,7 @@ CAST(value AS type)
 {% endhighlight %}
       </td>
       <td>
-        <p>Returns a new <i>value</i> being cast to type <i>type</i>. See the supported types <a href="{{ site.baseurl }}/zh/dev/table/types.html">here</a>.</p>
+        <p>Returns a new <i>value</i> being cast to type <i>type</i>. See the supported types <a href="{% link dev/table/types.zh.md %}">here</a>.</p>
         <p>E.g., <code>CAST('42' AS INT)</code> returns 42; <code>CAST(NULL AS VARCHAR)</code> returns NULL of type VARCHAR.</p>
       </td>
     </tr>
@@ -4620,7 +4620,7 @@ ANY.cast(TYPE)
 {% endhighlight %}
       </td>
       <td>
-        <p>Returns a new <i>ANY</i> being cast to type <i>TYPE</i>. See the supported types <a href="{{ site.baseurl }}/zh/dev/table/tableApi.html#data-types">here</a>.</p>
+        <p>Returns a new <i>ANY</i> being cast to type <i>TYPE</i>. See the supported types <a href="{% link dev/table/tableApi.zh.md %}#data-types">here</a>.</p>
         <p>E.g., <code>'42'.cast(INT)</code> returns 42; <code>Null(STRING)</code> returns NULL of type STRING.</p>
       </td>
     </tr>
@@ -4645,7 +4645,7 @@ ANY.cast(TYPE)
 {% endhighlight %}
       </td>
       <td>
-        <p>Returns a new <i>ANY</i> being cast to type <i>TYPE</i>. See the supported types <a href="{{ site.baseurl }}/zh/dev/table/tableApi.html#data-types">here</a>.</p>
+        <p>Returns a new <i>ANY</i> being cast to type <i>TYPE</i>. See the supported types <a href="{% link dev/table/tableApi.zh.md %}#data-types">here</a>.</p>
         <p>E.g., <code>"42".cast(Types.INT)</code> returns 42; <code>Null(Types.STRING)</code> returns NULL of type STRING.</p>
       </td>
     </tr>
@@ -5333,7 +5333,7 @@ SHA2(string, hashLength)
     <tr>
       <td>
 {% highlight java %}
-STRING.md5()
+STRING.zh.md5()
 {% endhighlight %}
       </td>
       <td>
@@ -5424,7 +5424,7 @@ STRING.sha2(INT)
     <tr>
       <td>
 {% highlight scala %}
-STRING.md5()
+STRING.zh.md5()
 {% endhighlight %}
       </td>
       <td>
